@@ -13,11 +13,24 @@ function MainPage() {
     const [simulationLoop, setSimulationLoop] = useState<number>(0);
     const [simulationState, setSimulationState] = useState<PossibleSimulaitonStates>(PossibleSimulaitonStates.OFF);
 
-  const onStartSimulation = () => {
-    const score = handleRandomizationOfTeamScores(TotalScoreAllowed, AllTeams.length);
-    setPreSetScore(score);
+    const onStartSimulation = () => {
+        const score = handleRandomizationOfTeamScores(TotalScoreAllowed, AllTeams.length);
+        setPreSetScore(score);
+        setCurrentSimulationScore([...AllTeams]);
   
-    setSimulationState(PossibleSimulaitonStates.ON);
+        setSimulationState(PossibleSimulaitonStates.ON);
+    }
+
+    const onFinishSimulation = () => {
+        clearInterval(simulationLoop);
+
+        setSimulationState(PossibleSimulaitonStates.DONE);
+
+        setCurrentSimulationScore([...preSetScore]);
+    }
+
+    const onRestartSimulation = () => {
+        onStartSimulation();
     }
 
     const handleUpdateCurrentScore = () => {
@@ -63,8 +76,8 @@ function MainPage() {
     return (
         <div>
             <ActionButton onStartSimulation={() => onStartSimulation()}
-                          onFinishSimulation={() => {}} 
-                          onRestartSimulation={() => {}}
+                          onFinishSimulation={() => onFinishSimulation()} 
+                          onRestartSimulation={() => onRestartSimulation()}
                           appState={simulationState}/>
             <ScoreBoard currentScore={currentSimulationScore}/>
         </div>

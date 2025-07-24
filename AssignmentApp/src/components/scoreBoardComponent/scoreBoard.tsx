@@ -44,9 +44,8 @@ function ScoreBoard ({ currentScore } : ScoreBoardProps){
     }
 
     useEffect(() => {
-        console.log("before", currentScore);
+        console.log("Here", currentScore);
         const score = handleSetUpMatches();
-        console.log("final", score);
 
        setCurrentVisualScore(score);
     }, [currentScore]);

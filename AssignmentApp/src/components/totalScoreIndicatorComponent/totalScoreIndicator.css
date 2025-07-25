@@ -1,0 +1,9 @@
+.totalScoreIndicatorMainContainer {
+    width: inherit;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.textContainer {
+    font-size: 0.75rem;
+}

@@ -1,0 +1,8 @@
+.actionButtonMainContainer {
+    width: inherit;
+    justify-content: center;
+}
+
+.buttonContainer {
+    width: 50%;
+}

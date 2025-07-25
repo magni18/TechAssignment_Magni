@@ -1,9 +1,0 @@
-.rootContainer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.teamVersusContainer {
-    display: inherit;
-}

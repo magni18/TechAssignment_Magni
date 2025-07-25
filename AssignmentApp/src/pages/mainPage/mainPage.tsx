@@ -1,11 +1,13 @@
-import type { Team } from "../interfaces/teams";
-import ActionButton from "../components/actionButtonComponent/actionButton";
-import { PossibleSimulaitonStates } from "../interfaces/simulationStates";
-import ScoreBoard from "../components/scoreBoardComponent/scoreBoard";
+import type { Team } from "../../interfaces/teams";
+import ActionButton from "../../components/actionButtonComponent/actionButton";
+import { PossibleSimulaitonStates } from "../../interfaces/simulationStates";
+import ScoreBoard from "../../components/scoreBoardComponent/scoreBoard";
 import { useEffect, useRef, useState } from "react";
-import handleRandomizationOfTeamScores from "../logic/teamScoringLogic";
-import { TotalScoreAllowed } from "../data/totalScoreAllowed";
-import Teams from "../data/allTeams.json";
+import handleRandomizationOfTeamScores from "../../logic/teamScoringLogic";
+import { TotalScoreAllowed } from "../../data/totalScoreAllowed";
+import Teams from "../../data/allTeams.json";
+import TotalScoreIndicator from "../../components/totalScoreIndicatorComponent/totalScoreIndicator";
+import "./mainPage.css";
 
 function MainPage() {
     const [preSetScore, setPreSetScore] = useState<Team[]>([]);
@@ -41,6 +43,8 @@ function MainPage() {
 
         currentSimulationScore.current = [...preSetScore];
         handleSetVisualScore(currentSimulationScore.current);
+
+        totalGoalsScored.current = TotalScoreAllowed;
     }
 
     const onRestartSimulation = () => {
@@ -131,12 +135,13 @@ function MainPage() {
     }, []);
 
     return (
-        <div>
+        <div className="mainContainer">
             <ActionButton onStartSimulation={() => onStartSimulation()}
                           onFinishSimulation={() => onFinishSimulation()} 
                           onRestartSimulation={() => onRestartSimulation()}
                           appState={simulationState}/>
             <ScoreBoard currentVisualScore={currentSimulationVisualScore}/>
+            <TotalScoreIndicator TotalScore={totalGoalsScored.current}/>
         </div>
     );
 }

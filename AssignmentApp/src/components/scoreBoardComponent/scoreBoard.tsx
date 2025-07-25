@@ -1,5 +1,5 @@
 import type { Team } from "../../interfaces/teams";
-import MatchResults from "../matchResultsComponent/matchResults";
+import "./scoreBoard.css";
 
 interface ScoreBoardProps {
     currentVisualScore: Team[][]
@@ -7,14 +7,29 @@ interface ScoreBoardProps {
 
 function ScoreBoard ({ currentVisualScore } : ScoreBoardProps){
     return (
-        <div>
+        <div className="scoreBoardMainContainer">
+            <div className="teamNamesVsContainer">
             {
             currentVisualScore.map((item, index) => {
                 return (
-                    <MatchResults teamScores={item} key={index}/>
+                    <div className="individualTeamNamesVsContainer" key={`name-${index}`}>
+                        { `${item[0].name} vs ${item[1].name}` }
+                    </div>
                 )
             })
             }
+            </div>
+            <div>
+            {
+                currentVisualScore.map((item, index) => {
+                return (
+                    <div key={`score-${index}`}>
+                        { `${item[0].currentScore} : ${item[1].currentScore}` }
+                    </div>
+                )
+            })
+            }
+            </div>
         </div>
     );
 }

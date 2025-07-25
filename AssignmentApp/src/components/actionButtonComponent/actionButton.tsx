@@ -1,4 +1,5 @@
 import { PossibleSimulaitonStates } from "../../interfaces/simulationStates";
+import "./actionButton.css";
 
 interface ActionButtonProps {
     onStartSimulation: () => void;
@@ -48,9 +49,11 @@ function ActionButton({onStartSimulation, onFinishSimulation, onRestartSimulatio
     }
 
     return (
-        <button onClick={handleButtonFunction(onStartSimulation)}>
+        <div className="actionButtonMainContainer">
+            <button className="buttonContainer" onClick={handleButtonFunction(onStartSimulation)}>
                 {handleButtonText()}
-        </button>
+            </button>
+        </div>
     );
 }
 

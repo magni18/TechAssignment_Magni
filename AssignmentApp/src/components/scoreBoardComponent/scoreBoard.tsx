@@ -1,55 +1,11 @@
-import { useEffect, useState } from "react";
 import type { Team } from "../../interfaces/teams";
 import MatchResults from "../matchResultsComponent/matchResults";
 
 interface ScoreBoardProps {
-    currentScore: Team[]
+    currentVisualScore: Team[][]
 }
 
-function ScoreBoard ({ currentScore } : ScoreBoardProps){
-
-    const [currentVisualScore, setCurrentVisualScore] = useState<Team[][]>([]);
-
-    const handleSetUpMatches = () : Team[][] => {
-        const returnList : Team[][] = [];
-        let tempList : Team[] = [];
-
-        let firstResettableIndex = 0;
-        let secondResettableIndex = 0;
-        
-        try{
-            for(let item of currentScore){
-                console.log("one", item);
-
-                if(firstResettableIndex > 1){
-                    firstResettableIndex = 0;
-                    secondResettableIndex++;
-
-                    returnList.push(tempList);
-
-                    tempList = [];
-                }
-
-                firstResettableIndex++;
-
-                tempList.push(item);
-            }
-        }
-        finally{
-            if(tempList.length > 0)
-                returnList.push(tempList);
-        }
-
-        return returnList;
-    }
-
-    useEffect(() => {
-        console.log("Here", currentScore);
-        const score = handleSetUpMatches();
-
-       setCurrentVisualScore(score);
-    }, [currentScore]);
-
+function ScoreBoard ({ currentVisualScore } : ScoreBoardProps){
     return (
         <div>
             {

@@ -2,31 +2,45 @@ import type { Team } from "../interfaces/teams";
 import ActionButton from "../components/actionButtonComponent/actionButton";
 import { PossibleSimulaitonStates } from "../interfaces/simulationStates";
 import ScoreBoard from "../components/scoreBoardComponent/scoreBoard";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import handleRandomizationOfTeamScores from "../logic/teamScoringLogic";
 import { TotalScoreAllowed } from "../data/totalScoreAllowed";
-import AllTeams from "../data/teamScores";
+import Teams from "../data/allTeams.json";
 
 function MainPage() {
     const [preSetScore, setPreSetScore] = useState<Team[]>([]);
-    const [currentSimulationScore, setCurrentSimulationScore] = useState<Team[]>([]);
-    const [simulationLoop, setSimulationLoop] = useState<number>(0);
     const [simulationState, setSimulationState] = useState<PossibleSimulaitonStates>(PossibleSimulaitonStates.OFF);
+    const [currentSimulationVisualScore, setCurrentSimulationVisualScore] = useState<Team[][]>([]);
+
+    const currentSimulationScore = useRef<Team[]>(structuredClone(Teams.teams) as Team[]);
+    const simulationLoopId = useRef<number>(0);
+    const totalGoalsScored = useRef<number>(0);
+
+    const handleSetVisualScore = (score : Team[]) => {
+        const tempVisualScore = handleSetUpMatches(score);
+        setCurrentSimulationVisualScore(tempVisualScore);
+    }
 
     const onStartSimulation = () => {
-        const score = handleRandomizationOfTeamScores(TotalScoreAllowed, AllTeams.length);
+        totalGoalsScored.current = 0;
+
+        const score = handleRandomizationOfTeamScores(TotalScoreAllowed, Teams.teams.length);
         setPreSetScore(score);
-        setCurrentSimulationScore([...AllTeams]);
+
+        currentSimulationScore.current = structuredClone(Teams.teams);
+
+        handleSetVisualScore(currentSimulationScore.current);
   
         setSimulationState(PossibleSimulaitonStates.ON);
     }
 
     const onFinishSimulation = () => {
-        clearInterval(simulationLoop);
+        clearInterval(simulationLoopId.current);
 
         setSimulationState(PossibleSimulaitonStates.DONE);
 
-        setCurrentSimulationScore([...preSetScore]);
+        currentSimulationScore.current = [...preSetScore];
+        handleSetVisualScore(currentSimulationScore.current);
     }
 
     const onRestartSimulation = () => {
@@ -35,9 +49,9 @@ function MainPage() {
 
     const handleUpdateCurrentScore = () => {
 
-        const teamsWithNotAllScores = currentSimulationScore.filter((item) => {
-            for (const element of preSetScore) {
-                if(item.currentScore >= element.currentScore){
+        const teamsWithNotAllScores = currentSimulationScore.current.filter((current) => {
+            for (const preset of preSetScore) {
+                if(preset.name === current.name && current.currentScore < preset.currentScore){
                     return true;
                 }
             }
@@ -48,7 +62,7 @@ function MainPage() {
         const randomIndex = Math.round(Math.random() * (teamsWithNotAllScores.length - 1));
         const teamToUpdateScore = teamsWithNotAllScores[randomIndex];
 
-        const updatedCurrentScores = currentSimulationScore.map((item) => {
+        const updatedCurrentScores = currentSimulationScore.current.map((item) => {
             if (item.name === teamToUpdateScore.name) {
                 item.currentScore++;
             }
@@ -56,15 +70,53 @@ function MainPage() {
             return item;
         });
 
-        setCurrentSimulationScore(updatedCurrentScores);
+        currentSimulationScore.current = updatedCurrentScores;
+
+        totalGoalsScored.current++;
+        if (totalGoalsScored.current >= TotalScoreAllowed){
+            onFinishSimulation();
+        }
+    }
+
+    const handleSetUpMatches = (score : Team[]) : Team[][] => {
+        const returnList : Team[][] = [];
+        let tempList : Team[] = [];
+
+        let firstResettableIndex = 0;
+        let secondResettableIndex = 0;
+        
+        try{
+            for(let item of score){
+
+                if(firstResettableIndex > 1){
+                    firstResettableIndex = 0;
+                    secondResettableIndex++;
+
+                    returnList.push(tempList);
+
+                    tempList = [];
+                }
+
+                firstResettableIndex++;
+
+                tempList.push(item);
+            }
+        }
+        finally{
+            if(tempList.length > 0)
+                returnList.push(tempList);
+        }
+
+        return returnList;
     }
 
     const handleStartUpdateLoop = () => {
         const updateLoopId = setInterval(() => {
             handleUpdateCurrentScore();
-        }, 10000);
+            handleSetVisualScore(currentSimulationScore.current);
+        }, 1000);
 
-        setSimulationLoop(updateLoopId);
+        simulationLoopId.current = updateLoopId;
     }
 
     useEffect(() => {
@@ -73,13 +125,18 @@ function MainPage() {
         }
     }, [simulationState]);
 
+    useEffect(() => {
+        currentSimulationScore.current = structuredClone(Teams.teams);
+        handleSetVisualScore(currentSimulationScore.current);
+    }, []);
+
     return (
         <div>
             <ActionButton onStartSimulation={() => onStartSimulation()}
                           onFinishSimulation={() => onFinishSimulation()} 
                           onRestartSimulation={() => onRestartSimulation()}
                           appState={simulationState}/>
-            <ScoreBoard currentScore={currentSimulationScore}/>
+            <ScoreBoard currentVisualScore={currentSimulationVisualScore}/>
         </div>
     );
 }

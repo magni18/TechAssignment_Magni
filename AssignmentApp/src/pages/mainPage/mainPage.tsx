@@ -8,6 +8,7 @@ import { TotalScoreAllowed } from "../../data/totalScoreAllowed";
 import Teams from "../../data/allTeams.json";
 import TotalScoreIndicator from "../../components/totalScoreIndicatorComponent/totalScoreIndicator";
 import "./mainPage.css";
+import { MaxSimulationLoopTime } from "../../data/maxLoopTime";
 
 function MainPage() {
     const [preSetScore, setPreSetScore] = useState<Team[]>([]);
@@ -118,7 +119,7 @@ function MainPage() {
         const updateLoopId = setInterval(() => {
             handleUpdateCurrentScore();
             handleSetVisualScore(currentSimulationScore.current);
-        }, 1000);
+        }, 1000 * (MaxSimulationLoopTime / TotalScoreAllowed));
 
         simulationLoopId.current = updateLoopId;
     }

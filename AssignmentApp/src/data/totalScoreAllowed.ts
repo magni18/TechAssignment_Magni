@@ -1,1 +1,1 @@
-export const TotalScoreAllowed : number = 9;
+export const TotalScoreAllowed: number = 9;

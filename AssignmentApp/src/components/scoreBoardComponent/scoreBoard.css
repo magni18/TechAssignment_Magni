@@ -1,16 +1,16 @@
 .scoreBoardMainContainer {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
 }
 
 .teamNamesVsContainer {
-    display: inherit;
-    width: 10rem;
-    flex-direction: column;
+  display: inherit;
+  width: 10rem;
+  flex-direction: column;
 }
 
 .individualTeamNamesVsContainer {
-    display: inherit;
-    justify-content: flex-start;
+  display: inherit;
+  justify-content: flex-start;
 }

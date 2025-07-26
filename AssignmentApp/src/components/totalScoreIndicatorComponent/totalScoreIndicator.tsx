@@ -1,15 +1,15 @@
-import "./totalScoreIndicator.css";
+import './totalScoreIndicator.css';
 
-interface TotalScoreIndicatorProps{
-    TotalScore: number;
+interface TotalScoreIndicatorProps {
+  TotalScore: number;
 }
 
-function TotalScoreIndicator({ TotalScore } : TotalScoreIndicatorProps){
-    return (
-        <div className="totalScoreIndicatorMainContainer">
-            <div className="textContainer"> Total Goals: { TotalScore } </div>
-        </div>
-    );
+function TotalScoreIndicator({ TotalScore }: TotalScoreIndicatorProps) {
+  return (
+    <div className="totalScoreIndicatorMainContainer">
+      <div className="textContainer"> Total Goals: {TotalScore} </div>
+    </div>
+  );
 }
 
 export default TotalScoreIndicator;

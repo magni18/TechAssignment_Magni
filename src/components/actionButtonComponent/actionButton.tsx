@@ -1,5 +1,6 @@
 import { PossibleSimulaitonStates } from '../../interfaces/simulationStates';
 import './actionButton.css';
+import ball from '../../assets/ball.svg';
 
 interface ActionButtonProps {
   onStartSimulation: () => void;
@@ -57,8 +58,20 @@ function ActionButton({
       <button
         className="buttonContainer"
         onClick={handleButtonFunction(onStartSimulation)}
+        type={'button'}
       >
-        {handleButtonText()}
+        <div className="buttonSubContainer">
+          <div className="buttonTextContainer">{handleButtonText()}</div>
+          <img
+            src={ball}
+            className={
+              appState === PossibleSimulaitonStates.ON
+                ? 'ballContainerMoving'
+                : 'ballContainerNotMoving'
+            }
+            alt="Spinning Ball"
+          ></img>
+        </div>
       </button>
     </div>
   );

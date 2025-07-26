@@ -1,8 +1,45 @@
 .actionButtonMainContainer {
   width: inherit;
   justify-content: center;
+  align-items: center;
 }
 
 .buttonContainer {
+  width: 65%;
+}
+
+.buttonSubContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes ballSpinAnimation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.ballContainerMoving {
+  animation-name: ballSpinAnimation;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  width: 2rem;
+  height: 2rem;
+}
+
+.ballContainerNotMoving {
+  width: 2rem;
+  height: 2rem;
+}
+
+.buttonTextContainer {
   width: 50%;
 }
